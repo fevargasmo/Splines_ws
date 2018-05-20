@@ -24,7 +24,7 @@ int mode;
 Scene scene;
 Interpolator interpolator;
 OrbitNode eye;
-boolean drawGrid = true, drawCtrl = true, drawBezie= true;
+boolean drawGrid = true, drawCtrl = true, drawBezie= false, drawHermite= false;
 
 //Choose P3D for a 3D scene, or P2D or JAVA2D for a 2D scene
 String renderer = P3D;
@@ -71,12 +71,15 @@ void draw() {
       scene.drawPickingTarget((Node)frame);
       
   }
-  if(drawBezie){
+  if(drawBezie){    
      cubicBezier(point.get(0), point.get(1), point.get(2),point.get(3), point.get(4),point.get(5),point.get(6), point.get(7), point.get(8),point.get(9), point.get(10),point.get(11));
+  }
+  if(drawHermite){
+     hermite(point.get(0), point.get(1), point.get(2),point.get(9), point.get(10),point.get(11),40,41,41,1,-1,-1);     
   }
   else {
     fill(255, 0, 0);
-    stroke(255, 0, 255);
+    stroke(255, 0, 0);
     scene.drawPath(interpolator);
   }
   // implement me
@@ -92,21 +95,54 @@ void draw() {
 //Hermite
 class point
 {
-float x,y;
+float x,y,z;
 };
 
-void hermite(point p1,point p4,float r1,float r4)
+void hermite(float x0, float y0, float z0,float x1, float y1, float z1,float r0x,float r0y,float r0z,float r1x,float r1y,float r1z)
 {
-  float x,y,t;
+  ArrayList<point> pts = new ArrayList<point>();
+  strokeWeight(1);
+  float x,y,z,t;
+  double h00,h01,h10,h11, aux1, aux2;
+  //(1+2*s)*(1-s)^2*(1)+s*(1-s)^2*(1)+s^2*(3-2*s)*(4)+s^2*(s-1)*(1)
   for(t=0.0;t<=1.0;t+=.001)
   {
-    x=(2*t*t*t-3*t*t+1)*p1.x+(-2*t*t*t+3*t*t)*p4.x+(t*t*t-2*t*t+t)*r1+(t*t*t-t*t)*r4;
-    y=(2*t*t*t-3*t*t+1)*p1.y+(-2*t*t*t+3*t*t)*p4.y+(t*t*t-2*t*t+1)*r1+(t*t*t-t*t)*r4;
-    stroke(0,0,255);
-    strokeWeight(2);
-    println(x + " " + y);
-    line(x,y,x,y);
+    //las cuatro funciones bases de hermite 
+    //auxiliares
+    aux1=Math.pow(1-t, 2);
+    aux2=Math.pow(t,2);
+    //funciones
+    h00=(1+2*t)*aux1;
+    h10=t*aux1;
+    h01=aux2*(3-2*t);
+    h11=aux2*(t-1);
+    
+    x=(float)(h00*x0+h10*r0x+h01*x1+h11*r1x);
+    y=(float)(h00*y0+h10*r0y+h01*y1+h11*r1y);
+    z=(float)(h00*z0+h10*r0z+h01*z1+h11*r1z);
+    stroke(0,0,254);
+    
+    //println(x + " " + y);
+    //line(x,y,z,x,y,z);
+    point pt = new point();
+    pt.x = x;
+    pt.y = y;
+    pt.z = z;
+    pts.add(pt);
    }
+   
+   
+   strokeWeight(1);
+  for(int i=0;i<pts.size() -1;i++){    
+    // 2D
+    //line(pts.get(i).x, pts.get(i).y, pts.get(i+1).x, pts.get(i+1).y);
+    //println(pts.get(i).x + " " + pts.get(i).y + " " + pts.get(i+1).x + " "+ pts.get(i+1).y + " " );
+    //3D
+    
+    stroke(0,0,254);
+    line(pts.get(i).x, pts.get(i).y, pts.get(i).z, pts.get(i+1).x, pts.get(i+1).y, pts.get(i+1).z);
+    
+  }
 }
 
 //Bezie
@@ -127,16 +163,6 @@ void cubicBezier(float x0, float y0, float z0,float x1, float y1, float z1, floa
     double b = 3 * t * Math.pow(1-t, 2);
     double c = 3 * Math.pow(t, 2) * (1-t);
     double d = Math.pow(t, 3); 
-    /*
-    double d = i / n;
-    double a = 1 - d;
-    double b = a * a;
-    double c = d * d;    
-    a = a * b;
-    b = 3 * b * d;
-    c = 3 * a * c;
-    d = c * d;
-*/
     
     double xt = (a * (double)x0 + b * (double)x1 + c * (double)x2 + d * (double)x3);
     double yt = (a * (double)y0 + b * (double)y1 + c * (double)y2 + d * (double)y3);
@@ -178,6 +204,8 @@ void keyPressed() {
     drawCtrl = !drawCtrl;
    if (key == 'b')
      drawBezie = !drawBezie;
+   if (key == 'h')
+     drawHermite = !drawHermite;
    
     
 }
