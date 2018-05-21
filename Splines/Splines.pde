@@ -29,8 +29,12 @@ boolean drawGrid = true, drawCtrl = true, drawBezie= false, drawHermite= false;
 //Choose P3D for a 3D scene, or P2D or JAVA2D for a 2D scene
 String renderer = P3D;
 ArrayList<Float> point = new ArrayList<Float>();
+ArrayList<Node> ctrlPoints = new ArrayList<Node>();
 void setup() {
   size(800, 800, renderer);
+  textAlign(CENTER, CENTER);
+  textSize(30);
+  fill(0);
   scene = new Scene(this);
   eye = new OrbitNode(scene);
   eye.setDamping(0);
@@ -48,8 +52,11 @@ void setup() {
   
   for (int i = 0; i < 4; i++) {
     Node ctrlPoint = new OrbitNode(scene);
-    ctrlPoint.randomize();
+    ctrlPoint.randomize();  
     interpolator.addKeyFrame(ctrlPoint);
+    
+    ctrlPoints.add(ctrlPoint);
+    
     point.add(ctrlPoint.position().x());
     point.add(ctrlPoint.position().y());
     point.add(ctrlPoint.position().z());
@@ -60,6 +67,7 @@ void setup() {
 
 void draw() {
   background(175);
+  text(myText, 0, 0, width, height);
   if (drawGrid) {
     stroke(255, 255, 0);
     scene.drawGrid(200, 50);
@@ -71,11 +79,13 @@ void draw() {
       scene.drawPickingTarget((Node)frame);
       
   }
-  if(drawBezie){    
+  if(drawBezie){
+    updatePoints();
      cubicBezier(point.get(0), point.get(1), point.get(2),point.get(3), point.get(4),point.get(5),point.get(6), point.get(7), point.get(8),point.get(9), point.get(10),point.get(11));
   }
   if(drawHermite){
-     hermite(point.get(0), point.get(1), point.get(2),point.get(9), point.get(10),point.get(11),40,41,41,1,-1,-1);     
+    updatePoints();
+     hermite(point.get(0), point.get(1), point.get(2),point.get(9), point.get(10),point.get(11),40,41,41,40,-40,-60);     
   }
   else {
     fill(255, 0, 0);
@@ -90,6 +100,20 @@ void draw() {
     contador++;
    //println("punto " + frame +" "+  frame.position().x());
   }
+  
+  println(myText);
+}
+
+
+
+void updatePoints(){
+  point.clear();
+  for(Node i : ctrlPoints){
+    point.add(i.position().x());
+    point.add(i.position().y());
+    point.add(i.position().z());
+  }   
+    
 }
 
 //Hermite
@@ -170,13 +194,13 @@ void cubicBezier(float x0, float y0, float z0,float x1, float y1, float z1, floa
     float x = (float)xt;
     float y = (float)yt;
     float z = (float)zt;
-    println(x + " "+ y + " "+ z) ;
+    //println(x + " "+ y + " "+ z) ;
     NodeOur pt = new NodeOur();
     pt.x = x;
     pt.y = y;
     pt.z = z;
     pts.add(pt); 
-    println(pt);
+    //println(pt);
   }
   strokeWeight(1);
   for(int i=0;i<n;i++){    
@@ -193,7 +217,13 @@ void cubicBezier(float x0, float y0, float z0,float x1, float y1, float z1, floa
 
 
 
+void changeCP(int nodeId, float x, float y, float z){
+   Node n0 = ctrlPoints.get(nodeId);
+   //println(x +" "+ y + " "+z);
+   n0.setPosition(x,y,z);
+}
 
+ String myText = ""; 
 
 void keyPressed() {
   if (key == ' ')
@@ -206,6 +236,22 @@ void keyPressed() {
      drawBezie = !drawBezie;
    if (key == 'h')
      drawHermite = !drawHermite;
+   
+     
+   
+   if (keyCode == BACKSPACE) {
+    if (myText.length() > 0) {
+      myText = myText.substring(0, myText.length()-1);
+    }
+  } else if (keyCode == DELETE) {
+    myText = "";
+  } else if (keyCode != SHIFT && keyCode != CONTROL && keyCode != ALT) {
+    myText = myText + key;
+  } if (keyCode == ENTER) {
+    String[] parts = myText.split(" ");
+    changeCP(Integer.parseInt(parts[0]),Float.parseFloat(parts[1]), Float.parseFloat(parts[2]), Float.parseFloat(parts[3]));
+    myText = "";
+  }
    
     
 }
