@@ -18,11 +18,13 @@ Complete la tabla:
 ## Bezie
 Realiza la curva de Bezie utilizando 2 puntos para inicio y fin de la curva, y dos intermedios para puntos de curvatura.
 
-<img src="https://github.com/fevargasmo/Splines_ws/blob/master/images/bezie1.png" alt="Bezie" class="center" style="display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;">
-<img src="https://github.com/fevargasmo/Splines_ws/blob/master/images/bezie2.png" alt="Bezie" class="center">
+ <p align="center">
+<img src="https://github.com/fevargasmo/Splines_ws/blob/master/images/bezie1.png" alt="Bezie" height="500" width="540"/>
+  </p>
+  
+ <p align="center">
+<img src="https://github.com/fevargasmo/Splines_ws/blob/master/images/bezie2.png" alt="Bezie" height="500" width="540"/>
+  </p>
 
 ## Hermite
 Realiza la curva de Hermite utilizando 2 puntos para inicio y fin de la curva, y valores de los dos vectores de direccion para cada punto.
