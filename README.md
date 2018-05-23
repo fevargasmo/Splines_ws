@@ -17,7 +17,8 @@ Complete la tabla:
 
 ## Bezie
 Realiza la curva de Bezie utilizando 2 puntos para inicio y fin de la curva, y dos intermedios para puntos de curvatura.
-![Bezie1](https://github.com/fevargasmo/Splines_ws/blob/master/images/bezie1.png "Bezie")
+
+<img src="https://github.com/fevargasmo/Splines_ws/blob/master/images/bezie1.png" alt="Bezie" class="center">
 ![Bezie2](https://github.com/fevargasmo/Splines_ws/blob/master/images/bezie2.png "Bezie")
 
 ## Hermite
