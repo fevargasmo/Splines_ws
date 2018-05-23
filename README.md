@@ -28,8 +28,14 @@ Realiza la curva de Bezie utilizando 2 puntos para inicio y fin de la curva, y d
 
 ## Hermite
 Realiza la curva de Hermite utilizando 2 puntos para inicio y fin de la curva, y valores de los dos vectores de direccion para cada punto.
-![Hermite1](https://github.com/fevargasmo/Splines_ws/blob/master/images/hermite1.png "Bezie")
-![Hermite2](https://github.com/fevargasmo/Splines_ws/blob/master/images/hermite2.png "Hermite")
+
+ <p align="center">
+<img src="https://github.com/fevargasmo/Splines_ws/blob/master/images/hermite1.png" alt="Hermite" height="500" width="540"/>
+  </p>
+  
+   <p align="center">
+<img src="https://github.com/fevargasmo/Splines_ws/blob/master/images/hermite2.png" alt="Hermite" height="500" width="540"/>
+  </p>
 
 ### Puntos de control
 Se puede cambiar la posicion(x,y,z) de los puntos de control mediante la consola de Processing, por ejemplo:
