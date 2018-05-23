@@ -44,6 +44,6 @@ Se puede cambiar la posicion(x,y,z) de los puntos de control mediante la consola
 0 23 42 56
 ```
 0 -> id del punto de control
-23 -> posicion x
-42 -> posicion y
-56 -> posicion z
+23 -> posicion x  
+42 -> posicion y  
+56 -> posicion z  
